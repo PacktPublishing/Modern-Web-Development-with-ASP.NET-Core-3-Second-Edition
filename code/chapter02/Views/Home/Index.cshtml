@@ -1,0 +1,13 @@
+﻿@using chapter02
+@using Microsoft.Extensions.Options
+@inject IOptions<LoggingSettings> LoggingSettings
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <h1>Default log level: @LoggingSettings.Value.LogLevel["Default"]</h1>
+</body>
+</html>
