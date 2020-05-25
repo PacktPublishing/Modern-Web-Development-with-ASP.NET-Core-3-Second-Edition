@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration.Json;
-using System;
-using System.IO;
 
 namespace chapter05
 {
