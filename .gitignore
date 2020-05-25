@@ -15,3 +15,5 @@
 /code/chapter11/bin/Debug/netcoreapp2.1
 /code/chapter11/obj
 *.user
+/code/chapter01/bin/Debug/netcoreapp3.1
+/code/chapter01/obj
