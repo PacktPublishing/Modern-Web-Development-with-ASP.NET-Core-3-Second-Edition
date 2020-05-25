@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,10 +18,24 @@ namespace chapter05
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IRazorPageActivator, CustomRazorPageActivator>();
+
+            services
+                .AddMvc()
+                .AddRazorOptions(options =>
+                {
+                    options.ViewLocationExpanders.Add(new ThemesViewLocationExpander("Mastering"));
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+            });
         }
     }
 }
