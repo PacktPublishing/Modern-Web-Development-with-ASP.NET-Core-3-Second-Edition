@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net;
+using Microsoft.Extensions.Hosting;
 
 namespace chapter03
 {
@@ -27,10 +27,12 @@ namespace chapter03
                 options.ConstraintMap.Add("evenint", typeof(EvenIntRouteConstraint));
             });
 
+            services.AddSingleton<ITranslator, MyTranslator>();
+            services.AddSingleton<IDeveloperPageExceptionFilter, CustomDeveloperPageExceptionFilter>();
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             /*app.UseExceptionHandler(options =>
             {
@@ -57,29 +59,57 @@ namespace chapter03
                 }
             });*/
 
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
             app.UseStatusCodePagesWithRedirects("/error/{0}");
             //app.UseStatusCodePages("text/html", "Error: {0}");
 
-            app.UseMvc(routes =>
+            app.UseRouting();
+
+
+            app.UseStatusCodePages(async context =>
             {
-                routes.MapGet(
-                    template: "DirectRoute",
-                    handler: async ctx =>
+                context.HttpContext.Response.ContentType = "text/plain";
+                var statusCode = context.HttpContext.Response.StatusCode;
+                await context.HttpContext.Response.WriteAsync("HTTP status code: " + statusCode);
+            });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapGet(
+                    pattern: "DirectRoute",
+                    requestDelegate: async ctx =>
                     {
                         ctx.Response.ContentType = "text/plain";
                         await ctx.Response.WriteAsync("Here's your response!");
                     });
 
-                routes.MapMiddlewareGet(
-                    template: "DirectMiddlewareRoute",
-                    action: appBuilder =>
-                    {
-                        appBuilder.UseMiddleware<ResponseMiddleware>();
-                    });
+                var newAppbuilder = endpoints.CreateApplicationBuilder();
+                newAppbuilder.UseMiddleware<ResponseMiddleware>();
 
-                routes.MapRoute(
+                endpoints.MapGet("DirectMiddlewareRoute", newAppbuilder.Build());
+
+                endpoints.MapDynamicControllerRoute<TranslateRouteValueTransformer>(
+                    pattern: "{language}/{controller}/{action}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}")
+                .WithDisplayName("Foo")
+                .WithMetadata(new MyMetadata1(), new MyMetadata2());
+
+                endpoints.MapControllerRoute("Local", "Home/Local").RequireHost("localhost", "127.0.0.1");
+
+                endpoints.MapControllerRoute(
+                    name: "Error404",
+                    pattern: "error/404",
+                    defaults: new { controller = "CatchAll", action = "Error404" }
+                );
+
+                endpoints.MapFallbackToFile("index.html");
             });
         }
     }

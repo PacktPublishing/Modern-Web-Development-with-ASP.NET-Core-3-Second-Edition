@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Net;
 
 namespace chapter03.Controllers
@@ -7,7 +9,17 @@ namespace chapter03.Controllers
     {
         public IActionResult Index()
         {
+            var endpoint = this.HttpContext.GetEndpoint();
+            var displayName = endpoint.DisplayName;
+            var metadata = endpoint.Metadata.ToArray();
+            var metadata1 = endpoint.Metadata.GetMetadata<MyMetadata1>();
+
             return View();
+        }
+
+        public IActionResult Local()
+        {
+            return Json(new { Ok = true });
         }
 
         [NonAction]
