@@ -4,3 +4,14 @@
 
 /code/chapter01/.vs
 /code/chapter01/obj/Debug/netcoreapp2.1
+/code/chapter02/.vs
+/code/chapter02/obj/Debug/netcoreapp2.1
+/code/BookShop
+/code/chapter02/obj
+/code/chapter03/.vs
+/code/chapter03/bin/Debug/netcoreapp2.1
+/code/chapter03/obj
+/code/chapter11/.vs
+/code/chapter11/bin/Debug/netcoreapp2.1
+/code/chapter11/obj
+*.user

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace chapter01
@@ -17,26 +13,40 @@ namespace chapter01
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost
+        public static IHostBuilder CreateWebHostBuilder(string[] args) =>
+            Host
                 .CreateDefaultBuilder(args)
-                .UseKestrel((context, options) =>
+                .ConfigureHostConfiguration(builder =>
                 {
-                    options.Limits.MaxConcurrentConnections = 10;
+                    //host configuration (Kestrel or HTTP.sys)
+                    builder.Properties["key"] = "value";
+                })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder
+                        //.UseStartup(typeof(Startup).Assembly.FullName);
+                        .UseStartup<Startup>()
+                        .UseKestrel(options =>
+                        {
+                            options.Limits.MaxConcurrentConnections = 10;
+                        });
                 })
                 .ConfigureAppConfiguration((context, builder) =>
                 {
                     //add or remove from the configuration builder
+                    //app configuration
+                    builder.Add(new JsonConfigurationSource { Path = "./configuration.json", Optional = true });
+                    builder.Properties["key"] = "value";
                 })
                 .ConfigureLogging((context, builder) =>
                 {
                     //add or remove from the logging builder
+                    builder.AddConsole();
                 })
-                .ConfigureServices((context, builder) =>
+                .ConfigureServices(services =>
                 {
                     //register services
-                })
-                //.UseStartup(typeof(Startup).Assembly.FullName);
-                .UseStartup<Startup>();
+                    services.AddSingleton<IMyService, MyService>();
+                });
     }
 }

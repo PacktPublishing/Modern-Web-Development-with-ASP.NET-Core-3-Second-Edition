@@ -52,7 +52,9 @@ namespace chapter01
             services.AddScoped(typeof(MyGenericService<>));
 
             //build the service provider
+#pragma warning disable ASP0000 // Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'
             var serviceProvider = services.BuildServiceProvider();
+#pragma warning restore ASP0000 // Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'
 
             //retrieve a constructed generic type
             var myGenericService = serviceProvider.GetService<MyGenericService<string>>();
@@ -71,7 +73,7 @@ namespace chapter01
             return new AutofacServiceProvider(builder.Build());
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             var instance = ActivatorUtilities.CreateInstance<MyType>(serviceProvider);
 
