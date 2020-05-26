@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace chapter05
+namespace chapter06
 {
     public class Startup
     {
@@ -17,15 +17,8 @@ namespace chapter05
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IRazorPageActivator, CustomRazorPageActivator>();
-
-            services
-                .AddMvc()
-                .AddRazorRuntimeCompilation()
-                .AddRazorOptions(options =>
-                {
-                    options.ViewLocationExpanders.Add(new ThemesViewLocationExpander("Mastering"));
-                })
+             services
+                .AddMvc()                
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
