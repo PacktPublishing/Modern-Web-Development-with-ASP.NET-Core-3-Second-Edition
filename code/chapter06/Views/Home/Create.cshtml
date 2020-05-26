@@ -1,7 +1,13 @@
 ﻿@model chapter06.Models.ContactModel
 
+<div asp-validation-summary="All"></div>
 
 @using (Html.BeginForm("Create", "Home"))
 {
-    @Html.EditorForModel();
+    @Html.EditorForModel()
+
+    <fieldset name="Location">
+        @Html.EditorFor(x => x.Location)
+    </fieldset>
+    <button>Submit</button>
 }

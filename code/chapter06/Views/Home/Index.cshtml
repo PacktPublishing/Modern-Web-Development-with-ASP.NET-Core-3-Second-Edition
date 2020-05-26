@@ -4,3 +4,50 @@
 @{
 }
 <h1>Hello, World!</h1>
+
+<form>
+    <fieldset>
+        <div><label for="name">Name: </label></div>
+        <div>
+            <input type="text" name="name" id="name" />
+            <div><label for="email">Email: </label></div>
+            <div>
+                <input type="email" name="email" id="email" />
+                <div><label for="gender">Gender: </label></div>
+                <div>
+                    <select name="gender" id="gender">
+                        <option>Female</option>
+                        <option>Male</option>
+                    </select>
+                </div>
+    </fieldset>
+</form>
+
+@using (Html.BeginForm("SaveForm", "Repository", FormMethod.Post,
+   new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="file" />
+    <input type="submit" value="Save" />
+}
+
+<script>
+
+$('#submit').click(function(evt) {
+  evt.preventDefault();
+
+  var payload = $('form').serialize();
+
+  $.ajax({
+    url: '@Url.Action("Save", "Repository")',
+    type: 'POST',
+    data: payload,
+    success: function (result) {
+      //success
+    },
+    error: function (error) {
+      //error
+    }
+    });
+  });
+
+</script>

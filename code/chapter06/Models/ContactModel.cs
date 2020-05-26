@@ -16,5 +16,7 @@ namespace chapter06.Models
         public string WorkEmail { get; set; }
         public DateTime? Birthday { get; set; }
         public string Gender { get; set; }
+        public bool IsActive { get; set; } = true;
+        public Location Location { get; set; }
     }
 }

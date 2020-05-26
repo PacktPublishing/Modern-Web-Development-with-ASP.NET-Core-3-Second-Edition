@@ -20,9 +20,9 @@ namespace chapter06.Models
 
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    if (Enum.TryParse<Gender>(value, out var gender))
+                    if (Enum.TryParse<Gender>(value, true, out var gender))
                     {
-                        bindingContext.Result = ModelBindingResult.Success(gender);
+                        bindingContext.Result = ModelBindingResult.Success(gender.ToString());
                     }
                     else
                     {

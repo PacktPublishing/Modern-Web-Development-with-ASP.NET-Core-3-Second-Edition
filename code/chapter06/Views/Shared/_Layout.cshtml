@@ -6,6 +6,31 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title></title>
+    <script src="lib/jquery.js"></script>
+    <script src="lib/jquery.validate.js"></script>
+    <script src="lib/jquery.validate.unobtrusive.js"></script>
+    <script>
+        (function ($) {
+            var $jQval = $.validator;
+            $jQval.addMethod('iseven', function (value, element, params) {
+                if (!value) {
+                    return true;
+                }
+
+                value = parseFloat($.trim(value));
+
+                if (!value) {
+                    return true;
+                }
+
+                var isEven = (value % 2) === 0;
+                return isEven;
+            });
+
+            var adapters = $jQval.unobtrusive.adapters;
+            adapters.addBool('iseven');
+        })(jQuery);
+    </script>
 </head>
 <body>
     @RenderBody()

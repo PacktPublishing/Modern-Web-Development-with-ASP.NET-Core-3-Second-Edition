@@ -18,12 +18,18 @@ namespace chapter06
         public void ConfigureServices(IServiceCollection services)
         {
              services
-                .AddMvc()                
+                .AddMvc()
+                .AddViewOptions(options =>
+                {
+                    options.ClientModelValidatorProviders.Add(new IsEvenClientModelValidatorProvider());
+                })
+                .AddRazorRuntimeCompilation()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
