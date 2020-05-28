@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace chapter07
 {
@@ -10,9 +12,27 @@ namespace chapter07
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost
+        public static IHostBuilder CreateWebHostBuilder(string[] args) =>
+            Host
                 .CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .ConfigureLogging((ctx, builder) =>
+                {
+                    if (ctx.HostingEnvironment.IsDevelopment())
+                    {
+                        builder
+                        .AddConsole()
+                        .AddDebug();
+                    }
+                })
+                .ConfigureAppConfiguration((ctx, builder) =>
+                {
+                
+                })
+                .ConfigureWebHostDefaults(builder =>
+                {
+                    
+
+                    builder.UseStartup<Startup>();
+                });
     }
 }

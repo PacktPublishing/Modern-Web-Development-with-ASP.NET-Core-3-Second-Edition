@@ -1,0 +1,29 @@
+﻿@using chapter07.Controllers
+@model chapter07.Models.LoginModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+
+@using (Html.BeginForm(nameof(AccountController.PerformLogin), "Account", FormMethod.Post))
+{
+    @*<fieldset>
+            <p>Username:</p>
+            <p><input type="text" name="username" /></p>
+            <p>Password:</p>
+            <p><input type="password" name="password" /></p>
+            <p>Remember me: <input type="checkbox" name="isPersistent" value="true" /></p>
+            <input type="hidden" name="ReturnUrl" value="@Context.Request.Query["ReturnUrl"]"/>
+            <button>Login</button>
+        </fieldset>*@
+    <fieldset>
+        <p>Username:</p>
+        <p>@Html.TextBoxFor(x => x.Username)</p>
+        <p>Password:</p>
+        <p>@Html.PasswordFor(x => x.Password)</p>
+        <p>Remember me: @Html.CheckBoxFor(x => x.IsPersistent, true)</p>
+        @Html.HiddenFor(x => x.ReturnUrl)
+        <button>Login</button>
+    </fieldset>
+}

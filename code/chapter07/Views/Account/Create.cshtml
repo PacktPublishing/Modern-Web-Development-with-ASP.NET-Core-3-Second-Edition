@@ -1,0 +1,25 @@
+﻿@using chapter07.Controllers
+
+@{
+    ViewData["Title"] = "Create User";
+}
+
+@using (Html.BeginForm(nameof(AccountController.PerformCreate), "Account", FormMethod.Post))
+{
+    <div asp-validation-summary="All"></div>
+    <fieldset>
+        <p>Username:</p>
+        <p><input type="text" name="username" /></p>
+        <p>Full Name:</p>
+        <p><input type="text" name="fullname" /></p>
+        <p>Birthday:</p>
+        <p><input type="date" name="birthday" /></p>
+        <p>Email:</p>
+        <p><input type="email" name="email" /></p>
+        <p>Password:</p>
+        <p><input type="password" name="password" /></p>
+        <p>Repeat Password:</p>
+        <p><input type="password" name="confirmationpassword" /></p>
+        <button>Create</button>
+    </fieldset>
+}
