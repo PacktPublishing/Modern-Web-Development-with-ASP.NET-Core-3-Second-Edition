@@ -170,10 +170,7 @@ namespace chapter07
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
-                endpoints.MapGet("/bar", ctx =>
-                {
-                    ctx.Response.Redirect("/hone/bar")
-                });
+                
             });
         }
     }

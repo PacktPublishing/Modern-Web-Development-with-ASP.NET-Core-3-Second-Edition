@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "chapter08": {
+    "chapter09": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
