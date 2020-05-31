@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace chapter02
 {
@@ -51,10 +55,31 @@ namespace chapter02
             services
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            services
+                .AddFeatureManagement()
+                .UseDisabledFeaturesHandler(new RedirectDisabledFeatureHandler("/Home/FeatureDisabled"));
+
+            var token = this.Configuration.GetReloadToken();
+            token.RegisterChangeCallback(callback: (state) =>
+            {
+                //state will be someData
+                //push the changes to whoever needs it
+            }, state: "SomeData");
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var keysAndValues = this.Configuration
+                .AsEnumerable()
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
+
+            var settings = new LoggingSettings { LogLevel = new Dictionary<string, LogLevel>() };
+
+            this.Configuration
+                .GetSection("Logging")
+                .Bind(settings);
+
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
