@@ -5,11 +5,32 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ClassLibrary\**" />
+    <Compile Remove="RazorClassLibrary\**" />
+    <Content Remove="ClassLibrary\**" />
+    <Content Remove="RazorClassLibrary\**" />
+    <EmbeddedResource Remove="ClassLibrary\**" />
+    <EmbeddedResource Remove="RazorClassLibrary\**" />
+    <None Remove="ClassLibrary\**" />
+    <None Remove="RazorClassLibrary\**" />
+  </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="ClassLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj" />
+    <ProjectReference Include="ClassLibrary\ClassLibrary.csproj" />
+    <ProjectReference Include="RazorClassLibrary\RazorClassLibrary.csproj" />
   </ItemGroup>
 
 </Project>

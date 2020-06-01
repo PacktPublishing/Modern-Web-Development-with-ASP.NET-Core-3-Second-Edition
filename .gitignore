@@ -38,6 +38,11 @@ code/chapter09/.vs
 code/chapter09/bin
 code/chapter09/obj
 
+/code/chapter09/ClassLibrary/bin
+/code/chapter09/ClassLibrary/obj
+/code/chapter09/RazorClassLibrary/bin
+/code/chapter09/RazorClassLibrary
+
 /code/chapter10/.vs
 /code/chapter10/bin
 /code/chapter10/obj

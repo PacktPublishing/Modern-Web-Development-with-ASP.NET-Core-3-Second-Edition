@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<script src="_content/RazorClassLibrary/script.js"></script>
+
+<div>
+    <h1>Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <!-- view component syntax -->
+    @await Component.InvokeAsync("MyView", new { Parameter = 4, OtherParameter = true });
+
+    <!-- alternate syntax -->
+    <vc:my-view parameter="1" other-parameter="false" />
+
+    <time format="yyyy-MM-dd">Current date is: {0}</time>
+
+    <!-- partial view from tag helper -->
+    <partial name="PartialView" />
+
+    @await Html.PartialAsync("PartialView");
+</div>
