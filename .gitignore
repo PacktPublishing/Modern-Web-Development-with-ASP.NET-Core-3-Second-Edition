@@ -59,6 +59,9 @@ code/chapter09/obj
 /code/chapter13/bin
 /code/chapter13/obj
 
+/code/chapter13/UnitTests/bin
+/code/chapter13/UnitTests/obj
+
 /code/chapter14/.vs
 /code/chapter14/bin
 /code/chapter14/obj
