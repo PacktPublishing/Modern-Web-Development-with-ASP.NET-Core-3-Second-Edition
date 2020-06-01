@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.Extensions.Hosting;
 
 namespace chapter11
 {
@@ -26,23 +27,32 @@ namespace chapter11
             {
             });
 
-            services.AddMvc()
-              .AddRazorPagesOptions(options =>
-              {
-                  options.AllowAreas = true;
-                  options.AllowMappingHeadRequestsToGetHandler = true;
-                  options.RootDirectory = "/Pages";
-                  options.Conventions.AddPageRoute("/HelloWorld", "");
-                  options.Conventions.AuthorizeAreaPage("Admin", "/Index");
-                  options.Conventions.AllowAnonymousToPage("/HelloWorld");
-                  options.Conventions.AddPageRoute("/Order", "My/Order/{id:int}");
-              });
+            services
+                .AddMvc()
+                .AddRazorPagesOptions(options =>
+                {
+                    options.RootDirectory = "/Pages";
+                    //default page
+                    options.Conventions.AddPageRoute("/HelloWorld", "");
+                    options.Conventions.AuthorizeAreaPage("Admin", "/Index");
+                    options.Conventions.AllowAnonymousToPage("/HelloWorld");
+                    options.Conventions.AddPageRoute("/Order", "My/Order/{id:int}");
+                });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
             app.UseAuthentication();
-            app.UseMvc();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+            });
         }
     }
 }

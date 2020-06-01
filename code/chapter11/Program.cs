@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
 
@@ -13,9 +14,13 @@ namespace chapter11
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost
+        public static IHostBuilder CreateWebHostBuilder(string[] args) =>
+            Host
                 .CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .ConfigureWebHostDefaults(builder =>
+                {
+                    builder.UseStartup<Startup>();
+                });
+
     }
 }
