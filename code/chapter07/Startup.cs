@@ -35,7 +35,7 @@ namespace chapter07
 
             services.AddHttpContextAccessor();
 
-            services.AddSingleton<IAuthorizationHandler, DayOfWeekAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, DayOfWeekAuthorizationHandler>();
             services.AddScoped<IAuthorizationHandler, LocalIpHandler>();
 
             services
@@ -52,7 +52,6 @@ namespace chapter07
                         .AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .AllowCredentials()
                 );
             });
 

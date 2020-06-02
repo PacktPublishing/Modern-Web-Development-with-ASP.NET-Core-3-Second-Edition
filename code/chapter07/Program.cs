@@ -9,10 +9,10 @@ namespace chapter07
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateWebHostBuilder(string[] args) =>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host
                 .CreateDefaultBuilder(args)
                 .ConfigureLogging((ctx, builder) =>
@@ -30,8 +30,6 @@ namespace chapter07
                 })
                 .ConfigureWebHostDefaults(builder =>
                 {
-                    
-
                     builder.UseStartup<Startup>();
                 });
     }

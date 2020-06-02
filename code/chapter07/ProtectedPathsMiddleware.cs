@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,29 +11,28 @@ namespace chapter07
     public class ProtectedPathsMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IEnumerable<ProtectedPathOptions> _options;
-        private readonly IAuthorizationService _authSvc;
+        private readonly ProtectedPathOptions _options;
 
         public ProtectedPathsMiddleware(
             RequestDelegate next,
-            IAuthorizationService authSvc,
-            IEnumerable<ProtectedPathOptions> options)
+            ProtectedPathOptions options)
         {
             this._next = next;
-            this._options = options ?? Enumerable.Empty<ProtectedPathOptions>();
-            this._authSvc = authSvc;
+            this._options = options;
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
-            foreach (var option in this._options)
+            using (context.RequestServices.CreateScope())
             {
-                if (context.Request.Path.StartsWithSegments(option.Path))
+                var authSvc = context.RequestServices.GetRequiredService<IAuthorizationService>();
+
+                if (context.Request.Path.StartsWithSegments(this._options.Path))
                 {
-                    var result = await this._authSvc.AuthorizeAsync(
+                    var result = await authSvc.AuthorizeAsync(
                         context.User,
                         context.Request.Path,
-                        option.PolicyName);
+                        this._options.PolicyName);
 
                     if (!result.Succeeded)
                     {
@@ -41,6 +41,7 @@ namespace chapter07
                     }
                 }
             }
+
             await this._next.Invoke(context);
         }
     }
