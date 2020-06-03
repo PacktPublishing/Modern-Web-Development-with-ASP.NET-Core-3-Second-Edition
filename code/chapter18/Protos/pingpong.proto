@@ -1,0 +1,33 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "PingPong";
+
+package PingPong;
+
+message PingRequest
+{
+    string name = 1;
+};
+
+message PongResponse
+{
+    string message = 1;
+    Ok ok = 2;
+};
+
+enum Ok
+{
+    No = 0;
+    Yes = 1;
+};
+
+service PingPongService
+{
+    rpc Ping(PingRequest) returns (PongResponse);
+
+    rpc LotsOfPongs(PingRequest) returns (stream PongResponse);
+
+    rpc LotsOfPings(stream PingRequest) returns (PongResponse);
+
+    rpc BidiPingPong(stream PingRequest) returns (stream PongResponse);
+};

@@ -1,0 +1,9 @@
+﻿<p>Hello, world!</p>
+
+<a asp-controller="Manage" asp-action="Index" asp-area="Admin">Administration</a>
+
+@Html.ActionLink(
+    linkText: "Administration",
+    actionName: "Index",
+    controllerName: "Manage",
+    routeValues: new { area = "Admin" })
