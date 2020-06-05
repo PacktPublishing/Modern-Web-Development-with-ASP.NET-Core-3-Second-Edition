@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CoreProfiler;
 using Microsoft.AspNetCore.Mvc;
 
 namespace chapter15.Controllers
@@ -10,7 +11,14 @@ namespace chapter15.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            using (ProfilingSession.Current.Step("/Home"))
+            {
+                using (ProfilingSession.Current.Step(() => "Return View"))
+                {
+                    return View();
+                }
+            }
+            
         }
     }
 }

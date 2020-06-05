@@ -1,8 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace UnitTests
@@ -25,11 +23,10 @@ namespace UnitTests
                 elm.SendKeys("asp.net");
 
                 var btn = driver.FindElement(By.Name("btnK"));
-
+              
                 Assert.NotNull(btn);
 
                 btn.Click();
-
             }
         }
     }
