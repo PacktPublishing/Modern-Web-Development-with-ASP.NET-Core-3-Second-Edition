@@ -1,0 +1,9 @@
+﻿@page "/Page/{PageNumber:int}"
+
+@code
+{
+    [Parameter]
+    public int PageNumber { get; set; }
+}
+
+<p>Page: @PageNumber</p>

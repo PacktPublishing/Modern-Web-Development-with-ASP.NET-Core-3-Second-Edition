@@ -1,0 +1,22 @@
+﻿<h3>SimpleComponent</h3>
+@implements IDisposable
+
+@code {
+    [Parameter]
+    public string Text { get; set; } = "Initial value";
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; } = new Dictionary<string, object>();
+
+
+    public void Dispose()
+    {
+        //dispose the component
+        //this method will be called automatically by the framework
+    }
+}
+<p>Text: @Text</p>
+<p>Attributes:</p>
+<pre>
+@string.Join("\n", Attributes.Select((kv) => $"{kv.Key}={kv.Value}"))
+</pre>

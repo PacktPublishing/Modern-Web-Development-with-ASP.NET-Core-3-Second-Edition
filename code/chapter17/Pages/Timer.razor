@@ -1,0 +1,47 @@
+﻿@using System
+@using System.Timers
+
+@implements IDisposable
+
+@code
+{
+    private System.Timers.Timer _timer;
+
+    [Parameter]
+    public TimeSpan Delay { get; set; }
+
+    [Parameter]
+    public Action OnElapsed { get; set; }
+
+    [Parameter]
+    public bool Repeat { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        this._timer = new System.Timers.Timer(this.Delay.TotalMilliseconds);
+        this._timer.Elapsed += this.OnTimerElapsed;
+        this._timer.Enabled = true;
+
+        base.OnParametersSet();
+    }
+
+    private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+    {
+        this.OnElapsed?.Invoke();
+
+        if (!this.Repeat)
+        {
+            this._timer.Elapsed -= this.OnTimerElapsed;
+            this._timer.Enabled = false;
+        }
+    }
+
+    void IDisposable.Dispose()
+    {
+        if (this._timer != null)
+        {
+            this._timer.Dispose();
+            this._timer = null;
+        }
+    }
+}
