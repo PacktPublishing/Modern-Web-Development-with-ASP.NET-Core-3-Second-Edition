@@ -14,29 +14,29 @@
 /code/chapter03/bin
 /code/chapter03/obj
 
-code/chapter04/.vs
-code/chapter04/bin
-code/chapter04/obj
+/code/chapter04/.vs
+/code/chapter04/bin
+/code/chapter04/obj
 
-code/chapter05/.vs
-code/chapter05/bin
-code/chapter05/obj
+/code/chapter05/.vs
+/code/chapter05/bin
+/code/chapter05/obj
 
-code/chapter06/.vs
-code/chapter06/bin
-code/chapter06/obj
+/code/chapter06/.vs
+/code/chapter06/bin
+/code/chapter06/obj
 
-code/chapter07/.vs
-code/chapter07/bin
-code/chapter07/obj
+/code/chapter07/.vs
+/code/chapter07/bin
+/code/chapter07/obj
 
-code/chapter08/.vs
-code/chapter08/bin
-code/chapter08/obj
+/code/chapter08/.vs
+/code/chapter08/bin
+/code/chapter08/obj
 
-code/chapter09/.vs
-code/chapter09/bin
-code/chapter09/obj
+/code/chapter09/.vs
+/code/chapter09/bin
+/code/chapter09/obj
 
 /code/chapter09/ClassLibrary/bin
 /code/chapter09/ClassLibrary/obj
@@ -73,6 +73,7 @@ code/chapter09/obj
 /code/chapter16/.vs
 /code/chapter16/bin
 /code/chapter16/obj
+/code/chapter16/node_modules
 
 /code/chapter17/.vs
 /code/chapter17/bin

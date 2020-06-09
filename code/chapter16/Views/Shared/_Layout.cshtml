@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>chapter16 - @ViewData["Title"]</title>
+    <script src="~/lib/msgpack5/msgpack5.js"></script>
+    <script src="~/lib/signalr/signalr.js"></script>
+    <script src="~/lib/signalr/signalr-protocol-msgpack.js"></script>
+    <script>
+
+        //chat
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl('/chat?key=value')
+            .withAutomaticReconnect()
+            .withHubProtocol(new signalR.protocols.msgpack.MessagePackHubProtocol())
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+       
+        connection
+            .start()
+            .catch((error) => {
+                console.log('Error creating the connection to the chat hub');
+            });
+
+        connection.on('message', (user, message) => {
+            document.getElementById('messages').innerHTML += `<p>Message from ${user}: ${message}</p>`;
+        });
+
+        connection.on('notify', () => {
+            document.getElementById('messages').innerHTML += '<p>-----notification------</p>';
+        });
+
+        connection.onclose((error) => {
+            console.log('Chat connection closed');
+        });
+
+        connection.onreconnecting((error) => {
+            console.log('Chat connection reconnecting...');
+        });
+
+        connection.onreconnected((connectionid) => {
+            console.log('Chat connection reconnected');
+        });
+
+        function send(message) {
+            connection.invoke('Send', message);
+            document.getElementById('message').value = '';
+        }
+
+        //timer
+        var notificationConnection = new signalR.HubConnectionBuilder()
+            .withUrl('/timer')
+            .withAutomaticReconnect()           
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        notificationConnection.on('notify', () => {
+            console.log('notification received!');
+        });
+
+        notificationConnection
+            .start()
+            .catch((error) => {
+                console.log(`Error starting the timer hub: ${error}`);
+            });
+
+    </script>
+</head>
+<body>
+    @RenderBody()
+</body>
+</html>

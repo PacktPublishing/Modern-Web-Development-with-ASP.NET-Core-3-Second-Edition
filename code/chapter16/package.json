@@ -1,0 +1,14 @@
+{
+  "name": "chapter16",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@microsoft/signalr": "^3.1.4",
+    "@aspnet/signalr-protocol-msgpack": "^1.1.0",
+    "msgpack5": "^4.2.1"
+  }
+}
