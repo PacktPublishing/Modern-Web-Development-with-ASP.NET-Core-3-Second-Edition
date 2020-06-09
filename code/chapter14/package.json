@@ -4,9 +4,13 @@
   "description": "",
   "main": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --config webpack.development.js --hot --inline"
+    "start": "node ClientApp/index.js",
+    "stop": "node node_modules/pkill/index.js --signal SIGINT chapter14"
   },
   "author": "Ricardo Peres",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "4.17.1",
+    "pkill": "2.0.0"
+  }
 }

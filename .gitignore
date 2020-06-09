@@ -90,3 +90,4 @@
 /code/BookShop
 *.user
 *.suo
+/code/chapter14/node_modules
