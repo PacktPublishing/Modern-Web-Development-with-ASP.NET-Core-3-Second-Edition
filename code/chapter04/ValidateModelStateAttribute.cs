@@ -26,9 +26,9 @@ namespace chapter04
         public string ControllerName { get; }
         public object RouteValues { get; }
 
-        public override Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (context.ModelState.IsValid == false)
+            if (!context.ModelState.IsValid)
             {
                 if (string.IsNullOrWhiteSpace(this.RedirectUrl) == false)
                 {
@@ -44,7 +44,7 @@ namespace chapter04
                 }
             }
 
-            return base.OnResultExecutionAsync(context, next);
+            base.OnActionExecuting(context);
         }
     }
 }

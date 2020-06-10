@@ -17,7 +17,10 @@ namespace chapter04
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new ValidateModelStateAttribute("/Home/Invalid"));
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
