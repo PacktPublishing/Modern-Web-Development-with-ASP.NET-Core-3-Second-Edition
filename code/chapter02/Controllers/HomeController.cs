@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
+using Microsoft.FeatureManagement.Mvc;
 using System.Threading.Tasks;
 
 namespace chapter02.Controllers
@@ -25,5 +26,11 @@ namespace chapter02.Controllers
 
             return View();
         }
+		
+        [FeatureGate("MyFeature")]
+		public IActionResult Check()
+		{
+			return Json(new { MyFeature = true });
+		}
     }
 }
