@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
@@ -20,7 +21,19 @@ namespace chapter05
             services.AddSingleton<IRazorPageActivator, CustomRazorPageActivator>();
 
             services
+                .AddLocalization(options => options.ResourcesPath = "Resources");
+
+            services
                 .AddMvc()
+                .AddMvcLocalization(LanguageViewLocationExpanderFormat.Suffix)
+                .AddViewLocalization
+                (
+                    format: LanguageViewLocationExpanderFormat.Suffix,
+                    setupAction: options =>
+                    {
+                        options.ResourcesPath = "Resources";
+                    }
+                )
                 .AddRazorRuntimeCompilation()
                 .AddRazorOptions(options =>
                 {
@@ -31,6 +44,16 @@ namespace chapter05
 
         public void Configure(IApplicationBuilder app)
         {
+            var supportedCultures = new[] { "en", "pt" };
+
+            var localizationOptions = new RequestLocalizationOptions()
+                //.AddInitialRequestCultureProvider(new AcceptLanguageHeaderRequestCultureProvider())
+                .SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+
+            app.UseRequestLocalization(localizationOptions);
+
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
