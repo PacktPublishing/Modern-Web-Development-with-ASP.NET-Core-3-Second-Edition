@@ -41,7 +41,7 @@
 /code/chapter09/ClassLibrary/bin
 /code/chapter09/ClassLibrary/obj
 /code/chapter09/RazorClassLibrary/bin
-/code/chapter09/RazorClassLibrary
+/code/chapter09/RazorClassLibrary/obj
 
 /code/chapter10/.vs
 /code/chapter10/bin
@@ -65,6 +65,7 @@
 /code/chapter14/.vs
 /code/chapter14/bin
 /code/chapter14/obj
+/code/chapter14/node_modules
 
 /code/chapter15/.vs
 /code/chapter15/bin
@@ -90,4 +91,3 @@
 /code/BookShop
 *.user
 *.suo
-/code/chapter14/node_modules
