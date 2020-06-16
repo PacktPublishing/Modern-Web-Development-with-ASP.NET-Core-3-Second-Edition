@@ -1,0 +1,1 @@
+﻿window.alert('Hello from a Razor Class Library!');
