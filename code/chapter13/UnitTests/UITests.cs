@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 using System;
 using Xunit;
 
@@ -21,9 +22,11 @@ namespace UnitTests
                 Assert.NotNull(elm);
 
                 elm.SendKeys("asp.net");
-
-                var btn = driver.FindElement(By.Name("btnK"));
               
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+
+                var btn = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(By.Name("btnK")));
+
                 Assert.NotNull(btn);
 
                 btn.Click();
