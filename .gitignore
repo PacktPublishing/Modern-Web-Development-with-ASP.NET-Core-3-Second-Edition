@@ -2,91 +2,123 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/code/chapter01/.vs
-/code/chapter01/obj
-/code/chapter01/bin
 
-/code/chapter02/.vs
-/code/chapter02/obj
-/code/chapter02/bin
+Chapter01/.vs
+Chapter01/obj
+Chapter01/bin
 
-/code/chapter03/.vs
-/code/chapter03/bin
-/code/chapter03/obj
+Chapter02/.vs
+Chapter02/obj
+Chapter02/bin
 
-/code/chapter04/.vs
-/code/chapter04/bin
-/code/chapter04/obj
+Chapter03/.vs
+Chapter03/bin
+Chapter03/obj
 
-/code/chapter05/.vs
-/code/chapter05/bin
-/code/chapter05/obj
+Chapter04/.vs
+Chapter04/bin
+Chapter04/obj
 
-/code/chapter06/.vs
-/code/chapter06/bin
-/code/chapter06/obj
+Chapter05/.vs
+Chapter05/bin
+Chapter05/obj
 
-/code/chapter07/.vs
-/code/chapter07/bin
-/code/chapter07/obj
+Chapter06/.vs
+Chapter06/bin
+Chapter06/obj
 
-/code/chapter08/.vs
-/code/chapter08/bin
-/code/chapter08/obj
+Chapter07/.vs
+Chapter07/bin
+Chapter07/obj
 
-/code/chapter09/.vs
-/code/chapter09/bin
-/code/chapter09/obj
+Chapter08/.vs
+Chapter08/bin
+Chapter08/obj
 
-/code/chapter09/ClassLibrary/bin
-/code/chapter09/ClassLibrary/obj
-/code/chapter09/RazorClassLibrary/bin
-/code/chapter09/RazorClassLibrary/obj
+Chapter09/.vs
+Chapter09/bin
+Chapter09/obj
 
-/code/chapter10/.vs
-/code/chapter10/bin
-/code/chapter10/obj
+Chapter09/ClassLibrary/bin
+Chapter09/ClassLibrary/obj
+Chapter09/RazorClassLibrary/bin
+Chapter09/RazorClassLibrary/obj
 
-/code/chapter11/.vs
-/code/chapter11/bin
-/code/chapter11/obj
+Chapter10/.vs
+Chapter10/bin
+Chapter10/obj
 
-/code/chapter12/.vs
-/code/chapter12/bin
-/code/chapter12/obj
+Chapter11/.vs
+Chapter11/bin
+Chapter11/obj
 
-/code/chapter13/.vs
-/code/chapter13/bin
-/code/chapter13/obj
+Chapter12/.vs
+Chapter12/bin
+Chapter12/obj
 
-/code/chapter13/UnitTests/bin
-/code/chapter13/UnitTests/obj
+Chapter13/.vs
+Chapter13/bin
+Chapter13/obj
 
-/code/chapter14/.vs
-/code/chapter14/bin
-/code/chapter14/obj
-/code/chapter14/node_modules
+Chapter13/UnitTests/bin
+Chapter13/UnitTests/obj
 
-/code/chapter15/.vs
-/code/chapter15/bin
-/code/chapter15/obj
+Chapter14/.vs
+Chapter14/bin
+Chapter14/obj
+Chapter14/node_modules
 
-/code/chapter16/.vs
-/code/chapter16/bin
-/code/chapter16/obj
-/code/chapter16/node_modules
+Chapter15/.vs
+Chapter15/bin
+Chapter15/obj
 
-/code/chapter17/.vs
-/code/chapter17/bin
-/code/chapter17/obj
+Chapter16/.vs
+Chapter16/bin
+Chapter16/obj
+Chapter16/node_modules
 
-/code/chapter18/.vs
-/code/chapter18/bin
-/code/chapter18/obj
+Chapter17/.vs
+Chapter17/bin
+Chapter17/obj
 
-/code/chapter19/.vs
-/code/chapter19/bin
-/code/chapter19/obj
+Chapter18/.vs
+Chapter18/bin
+Chapter18/obj
+
+Chapter19/.vs
+Chapter19/bin
+Chapter19/obj
+
+
+
+Chapter13/UnitTests/bin
+Chapter13/UnitTests/obj
+
+Chapter14/.vs
+Chapter14/bin
+Chapter14/obj
+Chapter14/node_modules
+
+Chapter15/.vs
+Chapter15/bin
+Chapter15/obj
+
+Chapter16/.vs
+Chapter16/bin
+Chapter16/obj
+Chapter16/node_modules
+
+Chapter17/.vs
+Chapter17/bin
+Chapter17/obj
+
+Chapter18/.vs
+Chapter18/bin
+Chapter18/obj
+
+Chapter19/.vs
+Chapter19/bin
+Chapter19/obj
 
 /code/BookShop
 *.user
