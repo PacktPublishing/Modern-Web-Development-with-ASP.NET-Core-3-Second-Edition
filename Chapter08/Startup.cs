@@ -177,6 +177,7 @@ namespace chapter08
                 routes.Select().Filter().Expand().OrderBy().Count();
                 routes.MapVersionedODataRoutes("odata", "odata/v{version:apiVersion}", models);
                 routes.EnableDependencyInjection();
+                routes.MapRoute("api", "{controller=Home}/{action=Index}");
             });
 
             if (env.IsDevelopment())
