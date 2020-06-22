@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
 namespace chapter08
@@ -11,11 +11,10 @@ namespace chapter08
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host
-                .CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(builder =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    builder.UseStartup<Startup>();
-                });           
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }

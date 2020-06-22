@@ -8,7 +8,10 @@ namespace chapter08.Controllers
     {
         public class ApiController : ControllerBase
         {
-            [HttpGet("[controller]/[action]/{version:apiversion}")]
+            //http://localhost:5000/api/Get/1.0/json => default json
+            //http://localhost:5000/api/Get/1.0/xml => xml
+            [HttpGet("[controller]/[action]/{version:apiversion}/{format=json}")]
+            [FormatFilter]
             public Model Get()
             {
                 return new Model();

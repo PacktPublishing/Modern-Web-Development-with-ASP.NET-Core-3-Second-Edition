@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>chapter08</name>
+    </assembly>
+    <members>
+        <member name="T:chapter08.Controllers.OrdersController">
+            <summary>
+            Controller that deals with orders.
+            </summary>
+        </member>
+        <member name="M:chapter08.Controllers.OrdersController.Get">
+            <summary>
+            Retrieves all orders.
+            </summary>
+            <returns>All available orders.</returns>
+            <response code="200">Orders successfully retrieved.</response>
+        </member>
+        <member name="T:chapter08.Controllers.ProductsController">
+            <summary>
+            Controller that deals with products.
+            </summary>
+        </member>
+        <member name="M:chapter08.Controllers.ProductsController.Get">
+            <summary>
+            Retrieves all products.
+            </summary>
+            <returns>All available products.</returns>
+            <response code="200">Products successfully retrieved.</response>
+        </member>
+    </members>
+</doc>
