@@ -3,14 +3,16 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:19591/",
-      "sslPort": 44325
+      "applicationUrl": "http://localhost:1265",
+      "sslPort": 44309
     }
   },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
+      "launchUrl": "http://localhost:1265/odata/v1.0/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -18,7 +20,7 @@
     "chapter08": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "https://localhost:5001/odata/products",
+      "launchUrl": "http://localhost:5000/odata/v1.0/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

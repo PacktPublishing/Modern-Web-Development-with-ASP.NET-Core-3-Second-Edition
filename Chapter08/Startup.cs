@@ -1,27 +1,27 @@
-﻿using chapter08.Models;
+using chapter08.Controllers;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
-using Microsoft.AspNet.OData.Formatter;
+using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Server.IIS;
-using Microsoft.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OData.Edm;
-using Microsoft.OpenApi.Models;
+using Microsoft.OData;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.Json;
 
@@ -36,20 +36,8 @@ namespace chapter08
 
         public IConfiguration Configuration { get; }
 
-        private static IEdmModel GetEdmModel()
-        {
-            var builder = new ODataConventionModelBuilder();
-            //register an entity set of type Order and call it Orders
-            var orders = builder.EntitySet<Order>("Orders").EntityType.HasKey(x => x.Id);
-            //same for products
-            builder.EntitySet<Product>("Products").EntityType.HasKey(x => x.Id);
-            //add other entity sets here
-            return builder.GetEdmModel();
-        }
-
         public void ConfigureServices(IServiceCollection services)
         {
-           
             services
                .AddAuthentication(options =>
                {
@@ -69,10 +57,10 @@ namespace chapter08
                    };
                });
 
-
             services
-                .AddControllers(options =>
+                .AddMvc(options =>
                 {
+                    options.EnableEndpointRouting = false;
                     options.RespectBrowserAcceptHeader = true;
                     options.FormatterMappings.SetMediaTypeMappingForFormat("xml", "application/xml");
                     options.FormatterMappings.SetMediaTypeMappingForFormat("json", "application/json");
@@ -84,11 +72,13 @@ namespace chapter08
                 })
                 .AddXmlSerializerFormatters();
 
-            services.AddApiVersioning();
-
             services
-                .AddOData();               
-            
+                .AddApiVersioning(options =>
+                {
+                    options.DefaultApiVersion = new ApiVersion(1, 0);
+                    options.ReportApiVersions = true;
+                });
+
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 //options.SuppressModelStateInvalidFilter = true;
@@ -103,53 +93,49 @@ namespace chapter08
                 };
             });
 
-            services.AddRouting();
+            services
+                .AddOData()
+                .EnableApiVersioning(options =>
+                {
+                });
 
-            //this does not work well with OData, so it is commented out
-            /*services.AddApiVersioning(options =>
+            services.AddODataApiExplorer(options =>
             {
-                options.ReportApiVersions = true;
-                options.AssumeDefaultVersionWhenUnspecified = true;
-                options.DefaultApiVersion = new ApiVersion(2, 0);
-                //options.ApiVersionReader = new HeaderApiVersionReader("api-version");
-                //options.ApiVersionReader = new QueryStringApiVersionReader("api-version");
-            });*/
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
+                options
+                    .QueryOptions
+                    .Controller<ProductsController>()
+                        .Action(c => c.Get())
+                            .Allow(AllowedQueryOptions.Skip | AllowedQueryOptions.Count)
+                            .AllowTop(100)
+                            .AllowOrderBy();
+            });
+
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ODataSwaggerOptions>();
 
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "My API V1",
-                    Version = "v1",
-                    Contact = new OpenApiContact
-                    {
-                        Email = "rjperes@hotmail.com",
-                        Name = "Ricardo Peres",
-                        Url = new Uri("http://weblogs.asp.net/ricardoperes")
-                    }
-                });
+                options.OperationFilter<ODataSwaggerOperationFilter>();
 
-                //assume that the XML file will have the same name as the current assembly
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                options.IncludeXmlComments(xmlPath);
+                options.IncludeXmlComments(XmlCommentsFilePath());
+
+                options.DocInclusionPredicate((prefix, description) =>
+                {
+                    return true;
+                });
             });
-            
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, VersionedODataModelBuilder modelBuilder, IApiVersionDescriptionProvider provider)
         {
+            var models = modelBuilder.GetEdmModels();
+
             app.UseAuthentication();
-       
+
             if (env.IsDevelopment())
-            { 
+            {
                 app.UseDeveloperExceptionPage();
-                
-                app.UseSwagger();
-                app.UseSwaggerUI(options =>
-                {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                });
             }
             else
             {
@@ -166,7 +152,7 @@ namespace chapter08
                             Detail = exception.Message
                         };
 
-                        if (exception is BadHttpRequestException badHttpRequestException)
+                        if (exception is BadHttpRequestException)
                         {
                             problemDetails.Title = "Invalid request!";
                             problemDetails.Status = StatusCodes.Status400BadRequest;
@@ -185,13 +171,32 @@ namespace chapter08
                 });
             }
 
-            app.UseRouting();
-            app.UseEndpoints(endpoints =>
+            app.UseMvc(routes =>
             {
-                endpoints.MapControllers();
-                endpoints.Select().Expand().Filter().OrderBy().Count().MaxTop(10);
-                endpoints.MapODataRoute("odata", "odata", GetEdmModel());
-            });            
+                routes.ServiceProvider.GetRequiredService<ODataOptions>().UrlKeyDelimiter = ODataUrlKeyDelimiter.Parentheses;
+                routes.Select().Filter().Expand().OrderBy().Count();
+                routes.MapVersionedODataRoutes("odata", "odata/v{version:apiVersion}", models);
+                routes.EnableDependencyInjection();
+            });
+
+            if (env.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(options =>
+                {
+                    foreach (var description in provider.ApiVersionDescriptions)
+                    {
+                        options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+                    }
+                });
+            }
+        }
+
+        private static string XmlCommentsFilePath()
+        {
+            var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+            var fileName = $"{typeof(Startup).Assembly.GetName().Name}.xml";
+            return Path.Combine(basePath, fileName);
         }
     }
 }
