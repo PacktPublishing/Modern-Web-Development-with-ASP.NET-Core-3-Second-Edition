@@ -62,6 +62,7 @@ namespace chapter08
                 {
                     options.EnableEndpointRouting = false;
                     options.RespectBrowserAcceptHeader = true;
+                    options.ReturnHttpNotAcceptable = true;
                     options.FormatterMappings.SetMediaTypeMappingForFormat("xml", "application/xml");
                     options.FormatterMappings.SetMediaTypeMappingForFormat("json", "application/json");
                 })
