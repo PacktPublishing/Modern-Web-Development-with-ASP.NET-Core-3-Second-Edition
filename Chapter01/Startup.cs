@@ -1,32 +1,44 @@
-﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
+﻿using System;
+using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Threading.Tasks;
 
 namespace chapter01
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env)
         {
-            this.Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+            Configuration = builder.Build();
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfigurationRoot Configuration { get; }
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public ILifetimeScope AutofacContainer { get; private set; }
+
+        // ConfigureServices is where you register dependencies. This gets
+        // called by the runtime before the ConfigureContainer method, below.
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<MyType>();
+            // Add services to the collection. Don't build or return
+            // any IServiceProvider or the ConfigureContainer method
+            // won't get called. Don't create a ContainerBuilder
+            // for Autofac here, and don't call builder.Populate() - that
+            // happens in the AutofacServiceProviderFactory for you.
+            services.AddOptions();
 
-            services.AddScoped<IMyService, MyService>();
-
-            services.AddScoped<IMyOtherService, MyOtherService>();
+            services.AddSingleton<MyType>()
+                .AddScoped<IMyService, MyService>()
+                .AddScoped<IMyOtherService, MyOtherService>();
 
             services.AddHttpContextAccessor();
 
@@ -35,8 +47,7 @@ namespace chapter01
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             /*
-            services.AddScoped<IMyService>(sp =>
-              new MyService((IMyOtherService)sp.GetService(typeof(IMyOtherService))));
+            services.AddScoped<IMyService>(sp => new MyService((IMyOtherService)sp.GetService(typeof(IMyOtherService))));
             services.AddScoped(typeof(IMyService), typeof(MyService));
             services.Add(new ServiceDescriptor(typeof(IMyService), typeof(MyService), ServiceLifetime.Scoped));
 
@@ -55,30 +66,25 @@ namespace chapter01
 
             //register an open generic type
             services.AddScoped(typeof(MyGenericService<>));
-
-            //build the service provider
-#pragma warning disable ASP0000 // Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'
-            var serviceProvider = services.BuildServiceProvider();
-#pragma warning restore ASP0000 // Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'
-
-            //retrieve a constructed generic type
-            var myGenericService = serviceProvider.GetService<MyGenericService<string>>();
-
-            var factory = serviceProvider.GetService<IServiceScopeFactory>();
-
-            using (var scope = factory.CreateScope())
-            {
-                var svc = scope.ServiceProvider.GetService<IMyService>();
-            }
-
-            //AutoFac
-            var builder = new ContainerBuilder();
-            //add registrations from services
-            builder.Populate(services);
-            return new AutofacServiceProvider(builder.Build());
         }
+        /*
+        // ConfigureContainer is where you can register things directly
+        // with Autofac. This runs after ConfigureServices so the things
+        // here will override registrations made in ConfigureServices.
+        // Don't build the container; that gets done for you by the factory.
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            // Register your own things directly with Autofac here. Don't
+            // call builder.Populate(), that happens in AutofacServiceProviderFactory
+            // for you.
+            builder.RegisterModule(new MyApplicationModule());
+        }
+        */
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
+        // Configure is where you add middleware. This is called after
+        // ConfigureContainer. You can use IApplicationBuilder.ApplicationServices
+        // here if you need to resolve things from the container.
+        public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider)
         {
             var instance = ActivatorUtilities.CreateInstance<MyType>(serviceProvider);
 
@@ -91,21 +97,20 @@ namespace chapter01
             app.Use(async (context, next) =>
             {
                 await context.Response.WriteAsync("step 2!");
+                await next();
             });
 
             //app.UseMiddleware<Middleware>();
             //app.Use(Process);
 
-            app.Run(async (context) =>
+            app.Run(async (context) => await context.Response.WriteAsync("Hello, OWIN World!"));
+        }
+        /*
+            private async Task Process(HttpContext context, Func<Task> next)
             {
-                await context.Response.WriteAsync("Hello, OWIN World!");
-            });
-        }
-
-        async Task Process(HttpContext context, Func<Task> next)
-        {
-            await context.Response.WriteAsync("Step 1");
-            await next();
-        }
+                await context.Response.WriteAsync("Step 3");
+                await next();
+            }
+        */
     }
 }
