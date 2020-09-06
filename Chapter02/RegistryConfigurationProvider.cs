@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Win32;
 
 namespace chapter02
 {
@@ -9,10 +9,7 @@ namespace chapter02
     {
         private readonly RegistryConfigurationSource _configurationSource;
 
-        public RegistryConfigurationProvider(RegistryConfigurationSource configurationSource)
-        {
-            _configurationSource = configurationSource;
-        }
+        public RegistryConfigurationProvider(RegistryConfigurationSource configurationSource) => _configurationSource = configurationSource;
 
         private RegistryKey GetRegistryKey(string key)
         {
@@ -45,7 +42,7 @@ namespace chapter02
 
                 default:
                     throw new InvalidOperationException($"Supplied hive {_configurationSource.Hive} is invalid.");
-             }
+            }
 
             var parts = key.Split('\\');
             var subKey = string.Join("", parts.Where(
@@ -56,7 +53,7 @@ namespace chapter02
 
         public override bool TryGet(string key, out string value)
         {
-            var regKey = this.GetRegistryKey(key);
+            var regKey = GetRegistryKey(key);
             var parts = key.Split('\\');
             var name = parts.Last();
             var regValue = regKey.GetValue(name);
@@ -68,7 +65,7 @@ namespace chapter02
 
         public override void Set(string key, string value)
         {
-            var regKey = this.GetRegistryKey(key);
+            var regKey = GetRegistryKey(key);
             var parts = key.Split('\\');
             var name = parts.Last();
 
