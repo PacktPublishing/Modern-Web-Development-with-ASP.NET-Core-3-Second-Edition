@@ -1,21 +1,17 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
-using Microsoft.Extensions.Configuration.UserSecrets;
-using Microsoft.Extensions.Hosting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.Hosting;
 
 namespace chapter02
 {
-    public class Program
+    public static class Program
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+        public static void Main(string[] args) => CreateHostBuilder(args).Build().Run();
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host
@@ -55,16 +51,13 @@ namespace chapter02
 
                     //builder.AddRegistry(RegistryHive.LocalMachine);
 
-
                 })
-            .ConfigureHostConfiguration(builder =>
-            {
-            })
+            //.ConfigureHostConfiguration(builder => { })
             .ConfigureWebHostDefaults(builder =>
             {
                 builder
-                .UseSetting("key", "value")
+                //.UseSetting("key", "value")
                 .UseStartup<Startup>();
-            });                             
+            });
     }
 }

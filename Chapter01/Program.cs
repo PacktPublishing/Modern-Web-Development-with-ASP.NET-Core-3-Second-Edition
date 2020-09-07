@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,28 +9,21 @@ namespace chapter01
 {
     public class Program
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+        public static void Main(string[] args) => CreateHostBuilder(args).Build().Run();
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host
                 .CreateDefaultBuilder(args)
-                .ConfigureHostConfiguration(builder =>
-                {
-                    //host configuration (Kestrel or HTTP.sys)
-                    builder.Properties["key"] = "value";
-                })
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                //.ConfigureHostConfiguration(builder => builder.Properties["key"] = "value") //host configuration (Kestrel or HTTP.sys)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder
+                        //.UseContentRoot(System.IO.Directory.GetCurrentDirectory())
+                        .UseIISIntegration()
                         //.UseStartup(typeof(Startup).Assembly.FullName);
                         .UseStartup<Startup>()
-                        .UseKestrel(options =>
-                        {
-                            options.Limits.MaxConcurrentConnections = 10;
-                        });
+                        .UseKestrel(options => options.Limits.MaxConcurrentConnections = 10);
                 })
                 .ConfigureAppConfiguration((context, builder) =>
                 {
@@ -39,14 +33,10 @@ namespace chapter01
                     builder.Properties["key"] = "value";
                 })
                 .ConfigureLogging((context, builder) =>
-                {
                     //add or remove from the logging builder
-                    builder.AddConsole();
-                })
+                    builder.AddConsole())
                 .ConfigureServices(services =>
-                {
                     //register services
-                    services.AddSingleton<IMyService, MyService>();
-                });
+                    services.AddSingleton<IMyService, MyService>());
     }
 }

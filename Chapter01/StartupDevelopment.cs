@@ -8,10 +8,7 @@ namespace chapter01
     {
         public IConfiguration Configuration { get; }
 
-        public StartupDevelopment(IConfiguration configuration)
-        {
-            this.Configuration = configuration;
-        }
+        public StartupDevelopment(IConfiguration configuration) => Configuration = configuration;
 
         public void ConfigureServices(IServiceCollection services)
         {

@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace chapter01
 {
@@ -7,15 +7,12 @@ namespace chapter01
     {
         private readonly RequestDelegate _next;
 
-        public Middleware(RequestDelegate next)
-        {
-            this._next = next;
-        }
+        public Middleware(RequestDelegate next) => _next = next;
 
         public async Task Invoke(HttpContext context)
         {
             await context.Response.WriteAsync("This is a middleware class!");
-            await this._next(context);
+            await _next(context);
         }
     }
 }

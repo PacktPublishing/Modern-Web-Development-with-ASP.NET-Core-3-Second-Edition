@@ -7,9 +7,6 @@ namespace chapter02
     {
         public RegistryHive Hive { get; set; } = RegistryHive.CurrentUser;
 
-        public IConfigurationProvider Build(IConfigurationBuilder builder)
-        {
-            return new RegistryConfigurationProvider(this);
-        }
+        public IConfigurationProvider Build(IConfigurationBuilder builder) => new RegistryConfigurationProvider(this);
     }
 }

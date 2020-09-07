@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace chapter02
 {
@@ -14,12 +14,12 @@ namespace chapter02
     {
         public Startup(IConfiguration configuration)
         {
-            this.Configuration = configuration;
+            Configuration = configuration;
 
             var cfg = configuration;
 
             cfg["key"] = "value";
-            string value = cfg["key"];
+            var value = cfg["key"];
 
             var section = cfg.GetSection("ConnectionStrings");
             var exists = section.Exists();
@@ -50,7 +50,7 @@ namespace chapter02
             services.ConfigureOptions<PreConfigureLoggingSettings>();
             services.ConfigureOptions<PreConfigureNamedLoggingSettings>();
 
-            services.Configure<LoggingSettings>(this.Configuration.GetSection("Logging"));
+            services.Configure<LoggingSettings>(Configuration.GetSection("Logging"));
 
             services
                 .AddMvc()
@@ -60,7 +60,7 @@ namespace chapter02
                 .AddFeatureManagement()
                 .UseDisabledFeaturesHandler(new RedirectDisabledFeatureHandler("/Home/FeatureDisabled"));
 
-            var token = this.Configuration.GetReloadToken();
+            var token = Configuration.GetReloadToken();
             token.RegisterChangeCallback(callback: (state) =>
             {
                 //state will be someData
@@ -70,13 +70,13 @@ namespace chapter02
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var keysAndValues = this.Configuration
+            var keysAndValues = Configuration
                 .AsEnumerable()
                 .ToDictionary(kv => kv.Key, kv => kv.Value);
 
             var settings = new LoggingSettings { LogLevel = new Dictionary<string, LogLevel>() };
 
-            this.Configuration
+            Configuration
                 .GetSection("Logging")
                 .Bind(settings);
 

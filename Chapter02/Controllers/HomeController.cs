@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.Mvc;
-using System.Threading.Tasks;
 
 namespace chapter02.Controllers
 {
@@ -22,15 +22,12 @@ namespace chapter02.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var isEnabled = await this._featureManager.IsEnabledAsync("MyFeature");
+            var isEnabled = await _featureManager.IsEnabledAsync("MyFeature");
 
             return View();
         }
-		
+
         [FeatureGate("MyFeature")]
-		public IActionResult Check()
-		{
-			return Json(new { MyFeature = true });
-		}
+        public IActionResult Check() => Json(new { MyFeature = true });
     }
 }

@@ -4,10 +4,7 @@
     {
         private readonly IMyOtherService _other;
 
-        public MyService(IMyOtherService other)
-        {
-            this._other = other;
-        }
+        public MyService(IMyOtherService other) => _other = other;
 
         public void MyOperation()
         {
